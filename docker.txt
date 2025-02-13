@@ -1,1 +1,82 @@
 This is a Docker repository 
+
+Containers are completed isolated environments, they can have processes, Network and mounts but they share the underlying OS.
+containers are used for specific task
+Docker  is a high level tool
+image is a package/template, containers are running instances of images 
+
+Instructions to install docker:
+https://docs.docker.com/engine/install/centos/
+
+sudo dnf -y install dnf-plugins-core
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker
+sudo docker run hello-world
+
+Uninstallion:
+sudo dnf remove docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+
+----------------------------------------------------------------------------------------------------------
+
+commands:
+run: run a container from image from docker host if it is not present it will pull from docker hub
+    e.g. docker run nginx
+ps: lists all the running containers, to show all Containers use -a 
+    e.g. docker ps
+stop: used to stop the containers
+    e.g. docker stop nginx
+rm: removes a container
+    e.g. docker rm nginx
+images: list the images
+    e.g. docker images
+pull: downloads the image from hub
+    e.g. docker pull nginx
+
+exec: to execute a cmd in a container
+    e.g. docker exec containername cat /etc/hosts (or) docker run containername cat /etc/hosts
+
+append a cmd:
+    e.g. docker run ubuntu sleep 5
+attach mode:  it runs in the foreground and get back to foreground
+    e.g. docker attach ubuntu
+detach mode:  it runs in the background
+    e.g. docker run -d simple-web-app
+
+docker run -it centos bash : we will move into the container
+i is for the interactive mode
+t is for the terminal of a container
+tag: used to specify the version of the software.
+
+
+port mapping: mapping a port to the container to access from web
+    e.g. docker run -p host_port:container_port webapp
+
+Volume mapping: mapping persist volume to the container outside of the container.
+    e.g. docker run -v /host_path/directory:var/lib/mysql mysql
+
+inspect container: get the details of the container
+    e.g. docker inspect containername
+container logs: get the logs of the container
+    e.g. docker logs containername
+
+Docker images:
+    Create your own images and used to deploy 
+
+sample format for flask webapp:
+    1. base image or OS
+    2. update the pkg manager
+    3. install dependenices using pkg manager
+    4. install python dependenices using pip
+    5. copy source code to /opt folder
+    6. run the webserver using  "flask" command
+docker build Dockerfile -t swami/my-webapp : to create an image
+docker push swami/my-webapp: push it to the docker registry
+
+Dockerfile
+Instruction argument
+
+docker history image-name
+
