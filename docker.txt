@@ -1,7 +1,7 @@
 This is a Docker repository 
 
 Containers are completed isolated environments, they can have processes, Network and mounts but they share the underlying OS.
-containers are used for specific task
+containers are used for specific task, container is alive until underlying process works.
 Docker  is a high level tool
 image is a package/template, containers are running instances of images 
 
@@ -79,4 +79,91 @@ Dockerfile
 Instruction argument
 
 docker history image-name
+
+environment variable: configure env variables while running the containers instead of static/fixed values.
+    syntax: docker run -e variable_name="values" imagename
+    e.g. docker run -e APP_COLOR=blue -p 38282:8080 --name=blue-app kodekloud/simple-webapp
+
+CMD: used to run the commands, in shell format or json format
+    e.g. CMD ["sleep" "10"] or CMD sleep 5
+ENTRYPOINT: no need to specify the environment variable name while running.
+    e.g. ENTRYPOINT ["sleep", "5"]
+    e.g. docker run --entrypoint sleep:2.0 ubuntu 5
+
+
+Docker compose: to run a multiple services put together we have to use docker compose file in yaml, it is applicable only in single host.
+    e.g. docker-compose up
+
+Docker engine is docker installed on it docker demon, rest api server, docker cli.
+docker daemon is a background process that manages objects like images, containers, volumes and networks.
+docker RESTAPI sever is a api interface that programs talk to daemon and provide Instructions to daemon.
+docker CLI to perform actions,uses RESTAPI to interact with daemon, can run with remote host to access docker daemon.
+    e.g. docker -H=remote-docker-ip:3275
+         docker -H=10.232.1.123:3275 run nginx
+
+Containerization: Uses a namespace to isolate the workspace
+    processid, unix timesharing, network, interprocess, Mount are created on their namespace.
+cgroups: used to restrict the amount h/w resource allocated to a container.
+    e.g. docker run --cpu=.5 ubunutu
+         docker run --memory=100m ubuntu
+
+docker storage drivers:
+    File system: /var/lib/docker stores all data related to images, containers, volumes.
+    It uses layered architechure and uses the caches for existing layers.
+    image layer: Read only
+    container layer: Read and write 
+    COPY-ON-WRITE
+docker volumes:
+    to persist the data.
+    e.g. docker volume create data_volume
+         docker run -v data_volume:var/lib/mysql mysql 
+    volume mounting:
+         docker run -v data_volume:var/lib/mysql mysql 
+    bind mount:
+         docker run -v /data/volume:var/lib/mysql mysql 
+                    or
+         docker run --mount type=bind, source=data/volume, dest=var/lib/mysql mysql
+Storage drivers: enables the layered architechure.
+
+without volume binding: "docker run -d -e MYSQL_ROOT_PASSWORD=db_pass123 --name mysql-db mysql"
+
+Volume binding: "docker run -d -v /opt/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=db_pass123 --name mysql-db mysql"
+
+
+
+Default networks:
+    Bridged network: private internal network usual series 172.17.0.1
+        e.g. docker run ubuntu
+    none: isolated not connected to any network
+        e.g. docker run ubuntu --network=none
+             docker run --name alpine-2 --network=none alpine 
+    network:
+        e.g. docker run ubuntu --network=host
+User-defined network:
+    docker network create --driver bridge --subnet 182.18.0.0/16 custom-isolated-network
+docker network ls : to list the Containers
+
+inspect:
+    docker network inspect bridge
+Embedded DNS: helps resolve host name, DNS server run at 127.0.0.1
+
+docker run --name webapp -p 38080:8080 -e DB_Host=mysql-db -e DB_Password=db_pass123 --link mysql-db:mysql-db --network=wp-mysql-network kodekloud/simple-webapp-mysql
+
+Registry:
+    docker run -d -p 5000:5000 --restart=always --name my-registry registry:2
+    docker image tag nginx:latest localhost:5000/nginx:latest : re-tag the image name
+    docker push localhost:5000/nginx:latest 
+    docker image tag httpd:latest localhost:5000/httpd:latest
+    docker push localhost:5000/httpd:latest  
+    curl -X GET localhost:5000/v2/_catalog : to check the images in the registry.
+    docker image prune -a : to remove all the images
+    docker image ls
+    docker login private_registry.io : to login into a private registry.
+Container orchestration:
+    docker swarm
+    kubernetes
+
+
+
+
 
