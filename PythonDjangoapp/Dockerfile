@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y python3 python3-pip python3-venv
 SHELL ["/bin/bash", "-c"]
 
 # Create a virtual environment and
-RUN python3 -m venv venv && source venv/bin/activate && pip install --no-cache-dir -r requirements.txt
+RUN python3 -m venv venv && source venv/bin/activate && pip install --no-cache-dir -r requirements.txt \
+    cd MyDevopsweb
 
 # Run the application
 # ENTRYPOINT [ "python3" ]
