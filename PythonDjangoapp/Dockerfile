@@ -20,4 +20,4 @@ RUN python3 -m venv venv && source venv/bin/activate && pip install --no-cache-d
 
 # Run the application
 # ENTRYPOINT [ "python3" ]
-CMD [ "python3", "manage.py", "runserver", "0.0.0.0:8000" ]
+CMD [ "python3", "./MyDevopsweb/manage.py", "runserver", "0.0.0.0:8000" ]
