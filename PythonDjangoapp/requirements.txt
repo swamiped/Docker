@@ -1,0 +1,5 @@
+# this file is to install django and tzdata tzdata is for timezone data
+```
+django
+tzdata
+```
